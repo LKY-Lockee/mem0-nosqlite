@@ -128,7 +128,7 @@ async function demoLocalMemory() {
       },
     },
     vectorStore: {
-      provider: "memory",
+      provider: "supabase",
       config: {
         collectionName: "memories",
         dimension: 768, // 768 is the dimension of the nomic-embed-text model
@@ -159,7 +159,7 @@ async function demoMemoryStore() {
       },
     },
     vectorStore: {
-      provider: "memory",
+      provider: "supabase",
       config: {
         collectionName: "memories",
         dimension: 1536,
@@ -305,7 +305,7 @@ async function demoGraphMemory() {
       },
     },
     vectorStore: {
-      provider: "memory",
+      provider: "qdrant",
       config: {
         collectionName: "memories",
         dimension: 1536,

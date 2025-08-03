@@ -10,7 +10,7 @@ const memory = new Memory({
     },
   },
   vectorStore: {
-    provider: "memory",
+    provider: "supabase",
     config: {
       collectionName: "memories",
       dimension: 768, // since we are using nomic-embed-text

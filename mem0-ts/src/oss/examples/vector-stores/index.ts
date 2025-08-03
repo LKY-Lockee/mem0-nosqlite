@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { demoMemoryStore } from "./memory";
+// import { demoMemoryStore } from "./memory";
 import { demoSupabase } from "./supabase";
 // import { demoQdrant } from "./qdrant";
 // import { demoRedis } from "./redis";

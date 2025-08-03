@@ -9,7 +9,8 @@ let version = "2.1.34";
 // Safely check for process.env in different environments
 let MEM0_TELEMETRY = true;
 try {
-  MEM0_TELEMETRY = process?.env?.MEM0_TELEMETRY === "false" ? false : true;
+  //   MEM0_TELEMETRY = process?.env?.MEM0_TELEMETRY === "false" ? false : true;
+  MEM0_TELEMETRY = false;
 } catch (error) {}
 const POSTHOG_API_KEY = "phc_hgJkUVJFYtmaJqrvf6CYN67TIQ8yhXAkWzUn9AMU4yX";
 const POSTHOG_HOST = "https://us.i.posthog.com/i/v0/e/";

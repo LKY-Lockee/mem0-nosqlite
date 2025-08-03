@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { createHash } from "crypto";
 import {
+  HistoryStoreConfig,
   MemoryConfig,
   MemoryConfigSchema,
   MemoryItem,
@@ -17,7 +18,6 @@ import {
 import {
   getFactRetrievalMessages,
   getUpdateMemoryMessages,
-  parseMessages,
   removeCodeBlocks,
 } from "../prompts";
 import { DummyHistoryManager } from "../storage/DummyHistoryManager";
@@ -69,8 +69,8 @@ export class Memory {
     if (this.config.disableHistory) {
       this.db = new DummyHistoryManager();
     } else {
-      const defaultConfig = {
-        provider: "sqlite",
+      const defaultConfig: HistoryStoreConfig = {
+        provider: "supabase",
         config: {
           historyDbPath: this.config.historyDbPath || ":memory:",
         },
@@ -82,7 +82,7 @@ export class Memory {
               this.config.historyStore.provider,
               this.config.historyStore,
             )
-          : HistoryManagerFactory.create("sqlite", defaultConfig);
+          : HistoryManagerFactory.create("supabase", defaultConfig);
     }
 
     this.collectionName = this.config.vectorStore.config.collectionName;
@@ -144,7 +144,7 @@ export class Memory {
 
   static fromConfig(configDict: Record<string, any>): Memory {
     try {
-      const config = MemoryConfigSchema.parse(configDict);
+      const config: MemoryConfig = MemoryConfigSchema.parse(configDict);
       return new Memory(config);
     } catch (e) {
       console.error("Configuration validation error:", e);
