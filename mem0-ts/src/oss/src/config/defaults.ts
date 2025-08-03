@@ -11,7 +11,7 @@ export const DEFAULT_MEMORY_CONFIG: MemoryConfig = {
     },
   },
   vectorStore: {
-    provider: "memory",
+    provider: "supabase",
     config: {
       collectionName: "memories",
       dimension: 1536,
@@ -42,7 +42,7 @@ export const DEFAULT_MEMORY_CONFIG: MemoryConfig = {
     },
   },
   historyStore: {
-    provider: "sqlite",
+    provider: "supabase",
     config: {
       historyDbPath: "memory.db",
     },

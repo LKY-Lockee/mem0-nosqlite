@@ -27,8 +27,10 @@ export interface VectorStoreConfig {
   [key: string]: any;
 }
 
+export type HistoryStoreProvider = "supabase" | "memory";
+
 export interface HistoryStoreConfig {
-  provider: string;
+  provider: HistoryStoreProvider;
   config: {
     historyDbPath?: string;
     supabaseUrl?: string;
@@ -37,8 +39,20 @@ export interface HistoryStoreConfig {
   };
 }
 
+export type LLMProvider =
+  | "openai"
+  | "openai_structured"
+  | "anthropic"
+  | "groq"
+  | "ollama"
+  | "google"
+  | "gemini"
+  | "azure_openai"
+  | "mistral"
+  | "langchain";
+
 export interface LLMConfig {
-  provider?: string;
+  provider?: LLMProvider;
   baseURL?: string;
   config?: Record<string, any>;
   apiKey?: string;
@@ -52,25 +66,43 @@ export interface Neo4jConfig {
   password: string;
 }
 
+export type GraphStoreProvider = "neo4j";
+
 export interface GraphStoreConfig {
-  provider: string;
+  provider: GraphStoreProvider;
   config: Neo4jConfig;
   llm?: LLMConfig;
   customPrompt?: string;
 }
 
+export type EmbedderProvider =
+  | "openai"
+  | "ollama"
+  | "google"
+  | "gemini"
+  | "azure_openai"
+  | "langchain";
+
+export type VectorStoreProvider =
+  | "qdrant"
+  | "redis"
+  | "supabase"
+  | "langchain"
+  | "vectorize"
+  | "pgvector";
+
 export interface MemoryConfig {
   version?: string;
   embedder: {
-    provider: string;
+    provider: EmbedderProvider;
     config: EmbeddingConfig;
   };
   vectorStore: {
-    provider: string;
+    provider: VectorStoreProvider;
     config: VectorStoreConfig;
   };
   llm: {
-    provider: string;
+    provider: LLMProvider;
     config: LLMConfig;
   };
   historyStore?: HistoryStoreConfig;
@@ -112,7 +144,14 @@ export interface VectorStoreResult {
 export const MemoryConfigSchema = z.object({
   version: z.string().optional(),
   embedder: z.object({
-    provider: z.string(),
+    provider: z.literal([
+      "openai",
+      "ollama",
+      "google",
+      "gemini",
+      "azure_openai",
+      "langchain",
+    ]),
     config: z.object({
       modelProperties: z.record(z.string(), z.any()).optional(),
       apiKey: z.string().optional(),
@@ -121,17 +160,34 @@ export const MemoryConfigSchema = z.object({
     }),
   }),
   vectorStore: z.object({
-    provider: z.string(),
+    provider: z.literal([
+      "qdrant",
+      "redis",
+      "supabase",
+      "langchain",
+      "vectorize",
+    ]),
     config: z
       .object({
         collectionName: z.string().optional(),
         dimension: z.number().optional(),
         client: z.any().optional(),
       })
-      .passthrough(),
+      .loose(),
   }),
   llm: z.object({
-    provider: z.string(),
+    provider: z.literal([
+      "openai",
+      "openai_structured",
+      "anthropic",
+      "groq",
+      "ollama",
+      "google",
+      "gemini",
+      "azure_openai",
+      "mistral",
+      "langchain",
+    ]),
     config: z.object({
       apiKey: z.string().optional(),
       model: z.union([z.string(), z.any()]).optional(),
@@ -144,7 +200,7 @@ export const MemoryConfigSchema = z.object({
   enableGraph: z.boolean().optional(),
   graphStore: z
     .object({
-      provider: z.string(),
+      provider: z.literal("neo4j"),
       config: z.object({
         url: z.string(),
         username: z.string(),
@@ -152,7 +208,18 @@ export const MemoryConfigSchema = z.object({
       }),
       llm: z
         .object({
-          provider: z.string(),
+          provider: z.literal([
+            "openai",
+            "openai_structured",
+            "anthropic",
+            "groq",
+            "ollama",
+            "google",
+            "gemini",
+            "azure_openai",
+            "mistral",
+            "langchain",
+          ]),
           config: z.record(z.string(), z.any()),
         })
         .optional(),
@@ -161,7 +228,7 @@ export const MemoryConfigSchema = z.object({
     .optional(),
   historyStore: z
     .object({
-      provider: z.string(),
+      provider: z.literal(["supabase", "memory"]),
       config: z.record(z.string(), z.any()),
     })
     .optional(),

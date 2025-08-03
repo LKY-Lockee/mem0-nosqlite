@@ -14,7 +14,7 @@ export async function demoMemoryStore() {
       },
     },
     vectorStore: {
-      provider: "memory",
+      provider: "supabase",
       config: {
         collectionName: "memories",
         dimension: 1536,

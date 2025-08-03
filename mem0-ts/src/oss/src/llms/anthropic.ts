@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { LLM, LLMResponse } from "./base";
 import { LLMConfig, Message } from "../types";
+import { TextBlock } from "@anthropic-ai/sdk/resources/messages";
 
 export class AnthropicLLM implements LLM {
   private client: Anthropic;
@@ -39,7 +40,7 @@ export class AnthropicLLM implements LLM {
       max_tokens: 4096,
     });
 
-    return response.content[0].text;
+    return (response.content[0] as TextBlock)?.text;
   }
 
   async generateChat(messages: Message[]): Promise<LLMResponse> {
